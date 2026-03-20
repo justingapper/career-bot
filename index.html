@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Justin Gapper — Career Assistant</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    }
+    h1 {
+      margin-top: 0;
+    }
+    #chat {
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ddd;
+      padding: 10px;
+      margin-bottom: 10px;
+      background: #fafafa;
+    }
+    .msg-user { color: #0b5ed7; margin: 8px 0; }
+    .msg-bot { color: #111; margin: 8px 0; }
+    textarea {
+      width: 100%;
+      height: 60px;
+      padding: 8px;
+    }
+    button {
+      margin-top: 8px;
+      padding: 10px 16px;
+      background: #0b5ed7;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #094bb5;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Justin Gapper — Career Assistant</h1>
+  <div id="chat"></div>
+
+  <textarea id="question" placeholder="Ask about Justin's work history, leadership experience, fintech background..."></textarea>
+  <button onclick="send()">Ask</button>
+</div>
+
+<script>
+async function send() {
+  const q = document.getElementById("question").value;
+  if (!q) return;
+
+  const chat = document.getElementById("chat");
+  chat.innerHTML += `<div class="msg-user"><b>You:</b> ${q}</div>`;
+
+  document.getElementById("question").value = "";
+
+  const res = await fetch("http://127.0.0.1:8000/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      question: q,
+      max_num_results: 5
+    })
+  });
+
+  const data = await res.json();
+  chat.innerHTML += `<div class="msg-bot"><b>Assistant:</b> ${data.answer}</div>`;
+  chat.scrollTop = chat.scrollHeight;
+}
+</script>
+
+</body>
+</html>
