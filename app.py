@@ -1,11 +1,17 @@
 import os
+from dotenv import load_dotenv
 from pathlib import Path
 from typing import Any
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+
 from pydantic import BaseModel, Field
 from openai import OpenAI
+
+load_dotenv()
 
 # OpenAI's file search tool is available in the Responses API,
 # and vector stores are used as the backing retrieval index.
@@ -69,6 +75,10 @@ def health() -> HealthResponse:
         model=MODEL,
         vector_store_id_present=bool(VECTOR_STORE_ID),
     )
+
+@app.get("/")
+def home():
+    return FileResponse(Path("index.html"))
 
 
 @app.post("/chat", response_model=ChatResponse)

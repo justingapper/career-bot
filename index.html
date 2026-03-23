@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Justin Gapper — Career Assistant</title>
+  <title>Justin Gapper Career Assistant</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -68,7 +68,7 @@ async function send() {
 
   document.getElementById("question").value = "";
 
-  const res = await fetch("http://127.0.0.1:8000/chat", {
+  const res = await fetch("/chat", { // http://127.0.0.1:8000/chat
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
